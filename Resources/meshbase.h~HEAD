@@ -1,0 +1,34 @@
+#ifndef MESHBASE_H
+#define MESHBASE_H
+
+#include <QOpenGLFunctions_4_1_Core>
+
+#include "gltypes.h"
+
+class Vertex;
+
+class MeshBase : protected QOpenGLFunctions_4_1_Core
+{
+public:
+    MeshBase();
+    ~MeshBase();
+
+    void init();
+
+    Vertex* vertices() const;
+    GLint* indices() const;
+
+    Vertex* mVertices{nullptr};
+    GLuint* mIndices{nullptr};
+
+    GLenum mDrawType;           //the way this object should be rendered
+    GLuint mNumberOfVertices{0};
+    GLuint mNumberOfIndices{0};
+    bool useIndexArray{false};
+
+    GLuint mVAO{0};
+    GLuint mVBO{0};
+    GLuint mEAO{0};
+};
+
+#endif // MESHBASE_H
