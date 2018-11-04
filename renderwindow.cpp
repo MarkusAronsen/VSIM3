@@ -18,6 +18,7 @@
 #include "octahedron.h"
 #include "terrain.h"
 #include "terrainball.h"
+#include "npc.h"
 #include "texture.h"
 #include "vertex.h"
 #include "transform.h"
@@ -137,6 +138,41 @@ void RenderWindow::init()
     mCoreEngine->mEntities.push_back(mTestEntity);
 
     terrainEntity = mCoreEngine->mEntities.back();
+    buildTerrainData();
+
+    //Patrol marker
+    MeshComponent *meshCube01 = new MeshComponent(mMeshFactory->getMeshComponent("cube"));
+    meshCube01->componentType = gsl::MESH;
+    mTestEntity = new Entity();
+    mTestEntity->mMeshComp = meshCube01;
+    mTestEntity->mMeshComp->ownerEntityID = mTestEntity->mEntityID;
+    checkForGLerrors();
+    mTestEntity->setMaterial(mMaterials[gsl::COLOR]);
+    mTestEntity->mMaterialComp->ownerEntityID = mTestEntity->mEntityID;
+    mTestEntity->mMaterialComp->componentType = gsl::MATERIAL;
+    checkForGLerrors();
+    mTestEntity->setObjectName("Cube");
+    mTestEntity->getTransform().setPosition(10.f, findHeight(Vec3(10.f, 0.f, 10.f), barycentricSearch(Vec3(10.f, 0.f, 10.f), 0)) + 1, 10.f);
+    mTestEntity->mTransformComp->ownerEntityID = mTestEntity->mEntityID;
+    mTestEntity->mTransformComp->componentType = gsl::TRANSFORM;
+    mCoreEngine->mEntities.push_back(mTestEntity);
+
+    //Patrol marker
+    MeshComponent *meshCube02 = new MeshComponent(mMeshFactory->getMeshComponent("cube"));
+    meshCube02->componentType = gsl::MESH;
+    mTestEntity = new Entity();
+    mTestEntity->mMeshComp = meshCube02;
+    mTestEntity->mMeshComp->ownerEntityID = mTestEntity->mEntityID;
+    checkForGLerrors();
+    mTestEntity->setMaterial(mMaterials[gsl::COLOR]);
+    mTestEntity->mMaterialComp->ownerEntityID = mTestEntity->mEntityID;
+    mTestEntity->mMaterialComp->componentType = gsl::MATERIAL;
+    checkForGLerrors();
+    mTestEntity->setObjectName("Cube");
+    mTestEntity->getTransform().setPosition(90.f, findHeight(Vec3(90.f, 0.f, 40.f), barycentricSearch(Vec3(90.f, 0.f, 40.f), 0)) + 1, 40.f);
+    mTestEntity->mTransformComp->ownerEntityID = mTestEntity->mEntityID;
+    mTestEntity->mTransformComp->componentType = gsl::TRANSFORM;
+    mCoreEngine->mEntities.push_back(mTestEntity);
 
     //TerrainBall
     MeshComponent *meshTerrainBall = new MeshComponent(mMeshFactory->getMeshComponent("terrainball"));
@@ -161,8 +197,6 @@ void RenderWindow::init()
     updateTerrainBall->setTerrain(terrainEntity, terrainBallEntity);
     updateTerrainBall->buildTriangles(0);
 
-    buildTerrainData();
-
     MeshComponent *meshControlPoint01 = new MeshComponent(mMeshFactory->getMeshComponent("ControlPoint"));
     meshControlPoint01->componentType = gsl::MESH;
     mTestEntity = new Entity();
@@ -174,7 +208,7 @@ void RenderWindow::init()
     mTestEntity->mMaterialComp->componentType = gsl::MATERIAL;
     checkForGLerrors();
     mTestEntity->setObjectName("ControlPoint01");
-    mTestEntity->getTransform().setPosition(10.f, 0.f, 10.f);
+    mTestEntity->getTransform().setPosition(40.f, 0.f, 15.f);
     mTestEntity->mTransformComp->ownerEntityID = mTestEntity->mEntityID;
     mTestEntity->mTransformComp->componentType = gsl::TRANSFORM;
     mCoreEngine->mEntities.push_back(mTestEntity);
@@ -196,7 +230,7 @@ void RenderWindow::init()
     mTestEntity->mMaterialComp->componentType = gsl::MATERIAL;
     checkForGLerrors();
     mTestEntity->setObjectName("ControlPoint02");
-    mTestEntity->getTransform().setPosition(20.f, 0.f, 5.f);
+    mTestEntity->getTransform().setPosition(20.f, 0.f, 20.f);
     mTestEntity->mTransformComp->ownerEntityID = mTestEntity->mEntityID;
     mTestEntity->mTransformComp->componentType = gsl::TRANSFORM;
     mCoreEngine->mEntities.push_back(mTestEntity);
@@ -217,7 +251,7 @@ void RenderWindow::init()
     mTestEntity->mMaterialComp->componentType = gsl::MATERIAL;
     checkForGLerrors();
     mTestEntity->setObjectName("ControlPoint03");
-    mTestEntity->getTransform().setPosition(5.f, 0.f, 20.f);
+    mTestEntity->getTransform().setPosition(50.f, 0.f, 50.f);
     mTestEntity->mTransformComp->ownerEntityID = mTestEntity->mEntityID;
     mTestEntity->mTransformComp->componentType = gsl::TRANSFORM;
     mCoreEngine->mEntities.push_back(mTestEntity);
@@ -238,7 +272,7 @@ void RenderWindow::init()
     mTestEntity->mMaterialComp->componentType = gsl::MATERIAL;
     checkForGLerrors();
     mTestEntity->setObjectName("ControlPoint04");
-    mTestEntity->getTransform().setPosition(25.f, 0.f, 25.f);
+    mTestEntity->getTransform().setPosition(70.f, 0.f, 20.f);
     mTestEntity->mTransformComp->ownerEntityID = mTestEntity->mEntityID;
     mTestEntity->mTransformComp->componentType = gsl::TRANSFORM;
     mCoreEngine->mEntities.push_back(mTestEntity);
@@ -248,7 +282,49 @@ void RenderWindow::init()
 
     controlPoints[3] = mCoreEngine->mEntities.back();
 
-    createBSplineData();
+    BSplineData NPCData;
+    NPCData = createBSplineData();
+
+    mMeshFactory->createBSpline();
+    mMeshFactory->createNPC();
+
+    //NPC
+    MeshComponent *meshNPC = new MeshComponent(mMeshFactory->getMeshComponent("NPC"));
+    meshNPC->componentType = gsl::MESH;
+    mTestEntity = new Entity();
+    mTestEntity->mMeshComp = meshNPC;
+    mTestEntity->mMeshComp->ownerEntityID = mTestEntity->mEntityID;
+    checkForGLerrors();
+    mTestEntity->setMaterial(mMaterials[gsl::COLOR]);
+    mTestEntity->mMaterialComp->ownerEntityID = mTestEntity->mEntityID;
+    mTestEntity->mMaterialComp->componentType = gsl::MATERIAL;
+    checkForGLerrors();
+    mTestEntity->setObjectName("NPC");
+    mTestEntity->getTransform().setPosition(10.f, findHeight(Vec3(10.f, 0.f, 10.f), barycentricSearch(Vec3(10.f, 0.f, 10.f), 0)) + 1, 10.f);
+    mTestEntity->mTransformComp->ownerEntityID = mTestEntity->mEntityID;
+    mTestEntity->mTransformComp->componentType = gsl::TRANSFORM;
+    mCoreEngine->mEntities.push_back(mTestEntity);
+
+    NPCBody = mCoreEngine->getEntities().back();
+    NPCInstance = new NPC(2, NPCData.controlPoints, NPCData.degree, NPCData.knots);
+    NPCInstance->setBody(NPCBody);
+
+    //BSpline
+    meshBSpline = new MeshComponent(mMeshFactory->getMeshComponent("BSpline"));
+    meshBSpline->componentType = gsl::MESH;
+    mTestEntity = new Entity();
+    mTestEntity->mMeshComp = meshBSpline;
+    mTestEntity->mMeshComp->ownerEntityID = mTestEntity->mEntityID;
+    checkForGLerrors();
+    mTestEntity->setMaterial(mMaterials[gsl::COLOR]);
+    mTestEntity->mMaterialComp->ownerEntityID = mTestEntity->mEntityID;
+    mTestEntity->mMaterialComp->componentType = gsl::MATERIAL;
+    checkForGLerrors();
+    mTestEntity->setObjectName("BSpline");
+    mTestEntity->getTransform().setPosition(0.f, 0.f, 0.f);
+    mTestEntity->mTransformComp->ownerEntityID = mTestEntity->mEntityID;
+    mTestEntity->mTransformComp->componentType = gsl::TRANSFORM;
+    mCoreEngine->mEntities.push_back(mTestEntity);
 
 
     emit ready();   //tell the mainWindow that init is finished
@@ -266,6 +342,9 @@ void RenderWindow::preRender(float deltaTime)
     mCamera->setDirection(7.f, 12.f);
 
     onControlPointOverlap();
+
+    NPCHeight = findHeight(NPCBody->getTransform().getPosition(), barycentricSearch(NPCBody->getTransform().getPosition(), 0));
+    NPCInstance->Update(NPCHeight);
 
     updateTerrainBall->update(deltaTime);
     mLight->setPosition(terrainBallEntity->getTransform().getPosition() + Vec3(0.f, 10.f, 0.f));
@@ -359,8 +438,6 @@ int RenderWindow::barycentricSearch(Entity *a, int currentIndex = 0)
     bc[1] = bc[1] / xAreal;
     bc[2] = bc[2] / xAreal;
 
-    std::cout << bc[0] << " " << bc[1] << " " << bc[2] << " " << xAreal << std::endl;
-
     if(bc[0] >= 0 && bc[1] >= 0 && bc[2] >= 0)
     {
         return currentIndex;
@@ -428,6 +505,111 @@ float RenderWindow::findHeight(Entity *a, int index)
     return l1 * z1 + l2 * z2 + l3 * z3;
 }
 
+int RenderWindow::barycentricSearch(Vec3 inPos, int currentIndex)
+{
+    if(currentIndex < 0)
+    {
+        std::cout << "Location is outside terrain!" << std::endl;
+        return 0;
+    }
+    float bc[3];
+    Vec3 x[2];
+    x[0] = triangleData[currentIndex].q - triangleData[currentIndex].p;
+    x[0].setY(0.f);
+    x[1] = triangleData[currentIndex].r - triangleData[currentIndex].p;
+    x[1].setY(0.f);
+    float xAreal = (x[0] ^ x[1]).length();
+
+    Vec3 u1 = triangleData[currentIndex].q - inPos;
+    u1.setY(0.f);
+    Vec3 u2 = triangleData[currentIndex].r - inPos;
+    u2.setY(0.f);
+    //    Vec2 u1v2 = Vec2(u1.getX(), u1.getZ());
+    //    Vec2 u2v2 = Vec2(u2.getX(), u2.getZ());
+    bc[0] = ((u2.getX() * u1.getZ()) - (u1.getX() * u2.getZ()));
+
+    Vec3 v1 = triangleData[currentIndex].r - inPos;
+    v1.setY(0.f);
+    Vec3 v2 = triangleData[currentIndex].p - inPos;
+    v2.setY(0.f);
+    bc[1] =  ((v2.getX() * v1.getZ()) - (v1.getX() * v2.getZ()));
+
+    Vec3 w1 = triangleData[currentIndex].p - inPos;
+    w1.setY(0.f);
+    Vec3 w2 = triangleData[currentIndex].q - inPos;
+    w2.setY(0.f);
+    bc[2] =  ((w2.getX() * w1.getZ()) - (w1.getX() * w2.getZ()));
+
+    bc[0] = bc[0] / xAreal;
+    bc[1] = bc[1] / xAreal;
+    bc[2] = bc[2] / xAreal;
+
+    if(bc[0] >= 0 && bc[1] >= 0 && bc[2] >= 0)
+    {
+        return currentIndex;
+    }
+
+    else if(bc[0] < bc[1] && bc[0] < bc[2])
+    {
+        if(triangleData[currentIndex].uNeighbor != -1)
+        {
+            return barycentricSearch(inPos, triangleData[currentIndex].uNeighbor);
+        }
+        else
+        {
+            std::cout << "Location is outside terrain!" << std::endl;
+            return 0;
+        }
+    }
+    else if(bc[1] < bc[2])
+    {
+        if(triangleData[currentIndex].vNeighbor != -1)
+        {
+            return barycentricSearch(inPos, triangleData[currentIndex].vNeighbor);
+        }
+        else
+        {
+            std::cout << "Location is outside terrain!" << std::endl;
+            return 0;
+        }
+    }
+    else
+    {
+        if(triangleData[currentIndex].wNeighbor != -1)
+        {
+            return barycentricSearch(inPos, triangleData[currentIndex].wNeighbor);
+        }
+        else
+        {
+            std::cout << "Location is outside terrain!" << std::endl;
+            return 0;
+        }
+    }
+}
+
+float RenderWindow::findHeight(Vec3 inPos, int index)
+{
+    float x = inPos.getX();
+    float y = inPos.getZ();
+
+    float x1 = triangleData[index].p.getX();
+    float x2 = triangleData[index].q.getX();
+    float x3 = triangleData[index].r.getX();
+
+    float y1 = triangleData[index].p.getZ();
+    float y2 = triangleData[index].q.getZ();
+    float y3 = triangleData[index].r.getZ();
+
+    float z1 = triangleData[index].p.getY();
+    float z2 = triangleData[index].q.getY();
+    float z3 = triangleData[index].r.getY();
+
+    float l1 = (((y2 - y3) * (x - x3)) + ((x3 - x2) * (y - y3))) / (((y2 - y3) * (x1 - x3)) + ((x3 - x2) * (y1 - y3)));
+    float l2 = (((y3 - y1) * (x - x3)) + ((x1 - x3) * (y - y3))) / (((y2 - y3) * (x1 - x3)) + ((x3 - x2) * (y1 - y3)));
+    float l3 = 1 - l1 - l2;
+    return l1 * z1 + l2 * z2 + l3 * z3;
+}
+
 void RenderWindow::startOpenGLDebugger()
 {
     QOpenGLContext * temp = this->context();
@@ -448,7 +630,7 @@ void RenderWindow::startOpenGLDebugger()
     }
 }
 
-void RenderWindow::createBSplineData()
+BSplineData RenderWindow::createBSplineData()
 {
 
     BSplineData data;
@@ -466,24 +648,19 @@ void RenderWindow::createBSplineData()
         }
     }
 
-    mMeshFactory->receiveData(data);
-    mMeshFactory->createBSpline();
+    data.degree += 2;
+    //NPC startpunkt
+    data.controlPoints.insert(data.controlPoints.begin(), Vec3(10.f, findHeight(Vec3(10.f, 0.f, 10.f), barycentricSearch(Vec3(10.f, 0.f, 10.f), 0)) + 1, 10.f));
+    //NPC sluttpunkt
+    data.controlPoints.insert(data.controlPoints.end(), Vec3(90.f, findHeight(Vec3(90.f, 0.f, 40.f), barycentricSearch(Vec3(90.f, 0.f, 40.f), 0)) + 1, 40.f));
 
-    meshBSpline = new MeshComponent(mMeshFactory->getMeshComponent("BSpline"));
-    meshBSpline->componentType = gsl::MESH;
-    mTestEntity = new Entity();
-    mTestEntity->mMeshComp = meshBSpline;
-    mTestEntity->mMeshComp->ownerEntityID = mTestEntity->mEntityID;
-    checkForGLerrors();
-    mTestEntity->setMaterial(mMaterials[gsl::COLOR]);
-    mTestEntity->mMaterialComp->ownerEntityID = mTestEntity->mEntityID;
-    mTestEntity->mMaterialComp->componentType = gsl::MATERIAL;
-    checkForGLerrors();
-    mTestEntity->setObjectName("BSpline");
-    mTestEntity->getTransform().setPosition(0.f, 0.f, 0.f);
-    mTestEntity->mTransformComp->ownerEntityID = mTestEntity->mEntityID;
-    mTestEntity->mTransformComp->componentType = gsl::TRANSFORM;
-    mCoreEngine->mEntities.push_back(mTestEntity);
+    data.knots.insert(data.knots.begin(), 0);
+    data.knots.insert(data.knots.end(), 1);
+    data.knots.insert(data.knots.begin(), 0);
+    data.knots.insert(data.knots.end(), 1);
+
+    mMeshFactory->receiveData(data);
+    return data;
 }
 
 void RenderWindow::onControlPointOverlap()
@@ -491,11 +668,32 @@ void RenderWindow::onControlPointOverlap()
     for(int i = 0; i < 4; i++)
     {
         if(controlPoints[i]->visibility &&
-          (controlPoints[i]->getTransform().getPosition() - terrainBallEntity->getTransform().getPosition()).length() <= 1.f)
+                (controlPoints[i]->getTransform().getPosition() - terrainBallEntity->getTransform().getPosition()).length() <= 1.f)
         {
             controlPoints[i]->visibility = false;
-            mCoreEngine->mEntities.back()->~Entity();
+
+            mCoreEngine->mEntities.back()->visibility = false;
             createBSplineData();
+            mMeshFactory->createBSpline();
+
+            NPCInstance->setItemCollected(i + 1);
+
+            meshBSpline = new MeshComponent(mMeshFactory->getMeshComponent("BSpline"));
+            meshBSpline->componentType = gsl::MESH;
+            mTestEntity = new Entity();
+            mTestEntity->mMeshComp = meshBSpline;
+            mTestEntity->mMeshComp->ownerEntityID = mTestEntity->mEntityID;
+            checkForGLerrors();
+            mTestEntity->setMaterial(mMaterials[gsl::COLOR]);
+            mTestEntity->mMaterialComp->ownerEntityID = mTestEntity->mEntityID;
+            mTestEntity->mMaterialComp->componentType = gsl::MATERIAL;
+            checkForGLerrors();
+            mTestEntity->setObjectName("BSpline");
+            mTestEntity->getTransform().setPosition(0.f, 0.f, 0.f);
+            mTestEntity->mTransformComp->ownerEntityID = mTestEntity->mEntityID;
+            mTestEntity->mTransformComp->componentType = gsl::TRANSFORM;
+            mCoreEngine->mEntities.push_back(mTestEntity);
+
         }
     }
 }

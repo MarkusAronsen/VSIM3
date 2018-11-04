@@ -9,6 +9,7 @@
 #include "vertex.h"
 #include "vec3.h"
 #include "vec2.h"
+#include "npc.h"
 
 MeshFactory::MeshFactory()
 {
@@ -181,6 +182,11 @@ void MeshFactory::receiveData(BSplineData inData)
 void MeshFactory::createBSpline()
 {
     mMeshes["BSpline"] = new BSpline(data.controlPoints, data.degree, data.knots);
+}
+
+void MeshFactory::createNPC()
+{
+    mMeshes["NPC"] = new NPC(2, data.controlPoints, data.degree, data.knots);
 }
 
 std::string MeshFactory::getFileExtension(const std::string &filename)

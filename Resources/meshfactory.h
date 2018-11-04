@@ -29,6 +29,7 @@ class MeshFactory
 
         void receiveData(BSplineData inData);
         void createBSpline();
+        void createNPC();
 private:
 
         std::string getFileExtension(const std::string& filename);

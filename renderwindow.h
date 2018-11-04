@@ -30,6 +30,7 @@ struct MaterialComponent;
 class MeshFactory;
 class Terrain;
 class TerrainBall;
+class NPC;
 
 using namespace gsl;
 
@@ -96,7 +97,9 @@ public:
 
     void buildTerrainData();
     int barycentricSearch(Entity *a, int currentIndex);
+    int barycentricSearch(Vec3 inPos, int currentIndex);
     float findHeight(Entity *a, int index);
+    float findHeight(Vec3 inPos, int index);
 
 signals:
     void ready();
@@ -137,9 +140,12 @@ private:
     Entity *terrainEntity;
     std::vector<TerrainTriangleData> triangleData;
     Entity *controlPoints[4]{nullptr};
-    void createBSplineData();
+    BSplineData createBSplineData();
     Entity *BSpline;
     void onControlPointOverlap();
+    Entity *NPCBody;
+    NPC *NPCInstance;
+    float NPCHeight;
 
     MeshComponent *meshBSpline;
 

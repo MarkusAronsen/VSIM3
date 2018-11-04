@@ -18,12 +18,11 @@ public:
 
 private:
 
-    std::vector<Vec3> b; //control points
+    std::vector<Vec3> b;
 
-   /* uint n;*/ //number of knots
     uint degree;
 
-    std::vector<float> mKnots; //knots
+    std::vector<float> mKnots;
 };
 
 #endif

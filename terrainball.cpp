@@ -14,7 +14,6 @@ void TerrainBall::update(GLfloat deltaTime)
 
     previousTriangle = barycentricSearch(previousTriangle);
     findHeight();
-    std::cout << previousTriangle << std::endl;
 }
 
 void TerrainBall::keyboardMovement(QKeyEvent *event)
@@ -167,7 +166,6 @@ int TerrainBall::barycentricSearch(int currentIndex)
     bc[1] = bc[1] / xAreal;
     bc[2] = bc[2] / xAreal;
 
-    std::cout << bc[0] << " " << bc[1] << " " << bc[2] << " " << xAreal << std::endl;
 
     if(bc[0] >= 0 && bc[1] >= 0 && bc[2] >= 0)
     {

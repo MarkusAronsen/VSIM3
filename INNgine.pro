@@ -50,7 +50,8 @@ SOURCES += main.cpp \
     terrain.cpp \
     terrainball.cpp \
     bspline.cpp \
-    controlpoint.cpp
+    controlpoint.cpp \
+    npc.cpp
 
 HEADERS += \
     renderwindow.h \
@@ -94,7 +95,8 @@ HEADERS += \
     terrain.h \
     terrainball.h \
     bspline.h \
-    controlpoint.h
+    controlpoint.h \
+    npc.h
 
 FORMS += \
     mainwindow.ui
