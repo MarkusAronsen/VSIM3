@@ -208,7 +208,7 @@ void RenderWindow::init()
     mTestEntity->mMaterialComp->componentType = gsl::MATERIAL;
     checkForGLerrors();
     mTestEntity->setObjectName("ControlPoint01");
-    mTestEntity->getTransform().setPosition(40.f, 0.f, 15.f);
+    mTestEntity->getTransform().setPosition(70.f, 0.f, 20.f);
     mTestEntity->mTransformComp->ownerEntityID = mTestEntity->mEntityID;
     mTestEntity->mTransformComp->componentType = gsl::TRANSFORM;
     mCoreEngine->mEntities.push_back(mTestEntity);
@@ -230,7 +230,7 @@ void RenderWindow::init()
     mTestEntity->mMaterialComp->componentType = gsl::MATERIAL;
     checkForGLerrors();
     mTestEntity->setObjectName("ControlPoint02");
-    mTestEntity->getTransform().setPosition(20.f, 0.f, 20.f);
+    mTestEntity->getTransform().setPosition(80.f, 0.f, 10.f);
     mTestEntity->mTransformComp->ownerEntityID = mTestEntity->mEntityID;
     mTestEntity->mTransformComp->componentType = gsl::TRANSFORM;
     mCoreEngine->mEntities.push_back(mTestEntity);
@@ -272,7 +272,7 @@ void RenderWindow::init()
     mTestEntity->mMaterialComp->componentType = gsl::MATERIAL;
     checkForGLerrors();
     mTestEntity->setObjectName("ControlPoint04");
-    mTestEntity->getTransform().setPosition(70.f, 0.f, 20.f);
+    mTestEntity->getTransform().setPosition(40.f, 0.f, 15.f);
     mTestEntity->mTransformComp->ownerEntityID = mTestEntity->mEntityID;
     mTestEntity->mTransformComp->componentType = gsl::TRANSFORM;
     mCoreEngine->mEntities.push_back(mTestEntity);
