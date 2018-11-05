@@ -139,7 +139,7 @@ private:
     Entity *terrainBallEntity;
     Entity *terrainEntity;
     std::vector<TerrainTriangleData> triangleData;
-    Entity *controlPoints[4]{nullptr};
+    Entity *controlPoints[4];
     BSplineData createBSplineData();
     Entity *BSpline;
     void onControlPointOverlap();

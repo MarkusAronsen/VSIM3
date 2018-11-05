@@ -216,7 +216,7 @@ void RenderWindow::init()
                                             findHeight(mTestEntity, barycentricSearch(mTestEntity, 0)) + 1.f,
                                             mTestEntity->getTransform().getPosition().getZ());
 
-    controlPoints[0] = mCoreEngine->mEntities.back();
+    controlPoints[0] = mCoreEngine->getEntities().back();
 
 
     MeshComponent *meshControlPoint02 = new MeshComponent(mMeshFactory->getMeshComponent("ControlPoint"));
@@ -238,7 +238,7 @@ void RenderWindow::init()
                                             findHeight(mTestEntity, barycentricSearch(mTestEntity, 0)) + 1.f,
                                             mTestEntity->getTransform().getPosition().getZ());
 
-    controlPoints[1] = mCoreEngine->mEntities.back();
+    controlPoints[1] = mCoreEngine->getEntities().back();
 
     MeshComponent *meshControlPoint03 = new MeshComponent(mMeshFactory->getMeshComponent("ControlPoint"));
     meshControlPoint03->componentType = gsl::MESH;
@@ -259,7 +259,7 @@ void RenderWindow::init()
                                             findHeight(mTestEntity, barycentricSearch(mTestEntity, 0)) + 1,
                                             mTestEntity->getTransform().getPosition().getZ());
 
-    controlPoints[2] = mCoreEngine->mEntities.back();
+    controlPoints[2] = mCoreEngine->getEntities().back();
 
     MeshComponent *meshControlPoint04 = new MeshComponent(mMeshFactory->getMeshComponent("ControlPoint"));
     meshControlPoint04->componentType = gsl::MESH;
@@ -280,7 +280,7 @@ void RenderWindow::init()
                                             findHeight(mTestEntity, barycentricSearch(mTestEntity, 0)) + 1,
                                             mTestEntity->getTransform().getPosition().getZ());
 
-    controlPoints[3] = mCoreEngine->mEntities.back();
+    controlPoints[3] = mCoreEngine->getEntities().back();
 
     BSplineData NPCData;
     NPCData = createBSplineData();
@@ -676,7 +676,8 @@ void RenderWindow::onControlPointOverlap()
             createBSplineData();
             mMeshFactory->createBSpline();
 
-            NPCInstance->setItemCollected(i + 1);
+            NPCInstance->receiveData(createBSplineData());
+            NPCInstance->setItemCollected();
 
             meshBSpline = new MeshComponent(mMeshFactory->getMeshComponent("BSpline"));
             meshBSpline->componentType = gsl::MESH;

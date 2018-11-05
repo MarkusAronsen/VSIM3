@@ -31,6 +31,9 @@ NPC::NPC(int subDivisions, std::vector<Vec3> inControlPoints, int inDegree, std:
 
 void NPC::Update(float height)
 {
+    if(controlPoints.size() == 2)
+        state = STOP;
+
     switch(state)
     {
     case PATROL:
@@ -70,6 +73,9 @@ void NPC::Update(float height)
 
         break;
 
+       case STOP:
+        break;
+
     }
 }
 
@@ -78,49 +84,45 @@ void NPC::setBody(Entity *e)
     body = e;
 }
 
-void NPC::setItemCollected(int controlPointIndex)
+void NPC::setItemCollected()
 {
     itemCollected = true;
-    collectedItems++;
-    missingItems.push_back(controlPointIndex);
+//    collectedItems++;
+//    missingItems.push_back(controlPointIndex);
 
-    for(int i = 0; i < missingItems.size(); i++)
-        std::cout << missingItems[i] << std::endl;
+//    for(int i = 0; i < missingItems.size(); i++)
+//        std::cout << missingItems[i] << std::endl;
 }
 
 void NPC::updateBSpline()
 {
+    std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
     controlPoints.clear();
-    for(int i = 0; i < 4; i++)
+    knots.clear();
+    for(int i = 0; i < data.controlPoints.size(); i++)
     {
-        if(std::find(missingItems.begin(), missingItems.end(), i) != missingItems.end())
-        {
-            //nothing
-        }
-        else
-        {
-            std::cout << i << std::endl;
-            if(i != 0)
-            {
-                controlPoints.push_back(tempControlPoints[i]);
-            }
-        }
+        controlPoints.push_back(data.controlPoints[i]);
     }
-
-    controlPoints.insert(controlPoints.begin(), tempControlPoints[0]);
-    controlPoints.insert(controlPoints.end(), tempControlPoints[5]);
-
-    for(int i = 0; i < missingItems.size(); i++)
+    for(int i = 0; i < data.knots.size(); i++)
     {
-        knots.erase(knots.begin());
-        knots.pop_back();
-        degree--;
+        knots.push_back(data.knots[i]);
     }
-    missingItems.clear();
+    degree = data.degree;
 
-    for(int i = 0; i < controlPoints.size(); i++)
+}
+
+void NPC::receiveData(BSplineData a)
+{
+    data.degree = a.degree;
+    data.controlPoints.clear();
+    data.knots.clear();
+    for(int i = 0; i < a.controlPoints.size(); i++)
     {
-        std::cout << controlPoints[i] << std::endl;
+        data.controlPoints.push_back(a.controlPoints[i]);
+    }
+    for(int i = 0; i < a.knots.size(); i++)
+    {
+        data.knots.push_back(a.knots[i]);
     }
 }
 

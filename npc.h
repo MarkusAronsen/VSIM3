@@ -5,6 +5,7 @@
 #include "vec3.h"
 #include "vertex.h"
 #include "entity.h"
+#include "renderwindow.h"
 #include <algorithm>
 
 using namespace gsl;
@@ -34,13 +35,15 @@ private:
     int collectedItems;
     std::vector<int> missingItems;
     Entity *body;
+    BSplineData data;
 
 public:
     NPC(int subDivisions, std::vector<Vec3> controlPoints, int degree, std::vector<float> knots);
     void Update(float height);
     void setBody(Entity *e);
-    void setItemCollected(int controlPointIndex);
+    void setItemCollected();
     void updateBSpline();
+    void receiveData(BSplineData a);
     Vec3 evaluateBSpline();
 };
 
